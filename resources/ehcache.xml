@@ -1,0 +1,51 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false">
+
+    <!-- 
+    maxElementsInMemory ：cache中最多可以存放的元素的数量。如果放入cache中的元素超过这个数值，有两种情况：
+					    1、若overflowToDisk的属性值为true，会将cache中多出的元素放入磁盘文件中。
+					    2、若overflowToDisk的属性值为false，会根据memoryStoreEvictionPolicy的策略替换cache中原有的元素。
+    
+    eternal ：意思是是否永驻内存。如果值是true，cache中的元素将一直保存在内存中，不会因为时间超时而丢失，
+			所以在这个值为true的时候，timeToIdleSeconds和timeToLiveSeconds两个属性的值就不起作用了。
+    
+    timeToIdleSeconds ：就是访问这个cache中元素的最大间隔时间。如果超过这个时间没有访问这个cache中的某个元素，那么这个元素将被从cache中清除。
+    
+    timeToLiveSeconds : 这是cache中元素的生存时间。意思是从cache中的某个元素从创建到消亡的时间，从创建开始计时，当超过这个时间，这个元素将被从cache中清除。
+    
+    overflowToDisk ：溢出是否写入磁盘。系统会根据标签<diskStore path="java.io.tmpdir"/> 中path的值查找对应的属性值，
+       				如果系统的java.io.tmpdir的值是 D:/temp，写入磁盘的文件就会放在这个文件夹下。文件的名称是cache的名称，后缀名的data。
+       	
+	maxElementsOnDisk ：在硬盘上最大的对象个数, 硬盘管理的缓存元素数量最大限值。默认值为0，就是没有限制。
+	
+	diskPersistent ：如diskPersistent="false" 是否持久化磁盘缓存，设定在虚拟机重启时是否进行磁盘存储，默认为false. 
+					要想把cache真正持久化到磁盘，写程序时必须注意，在是用net.sf.ehcache.Cache的void put (Element element)方法后要使用void flush()方法。
+					
+	diskExpiryThreadIntervalSeconds ：磁盘失效线程运行时间间隔,默认是120秒。
+	
+	memoryStoreEvictionPolicy ：元素逐出缓存规则。共有三种，(LRU)最近最少使用，为默认。 
+    							First In First Out (FIFO)，先进先出。Less Frequently Used(specified as LFU)最少使用。
+    							
+    diskSpoolBufferSizeMB ：存入磁盘时的缓冲区大小，默认30MB,每个缓存都有自己的缓冲区。
+     -->
+    <defaultCache
+		maxElementsInMemory="10000"
+		eternal="false"
+		timeToIdleSeconds="120"
+		timeToLiveSeconds="120"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU"
+		/>
+	
+	<!-- 配置级数据缓存8小时(28800秒)刷新 -->
+	<cache name="configCache"
+		maxElementsInMemory="20000"
+        eternal="false"
+        timeToIdleSeconds="3600"
+        timeToLiveSeconds="28800"
+        overflowToDisk="false"
+        memoryStoreEvictionPolicy="LRU" />
+    
+</ehcache>

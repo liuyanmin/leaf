@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- ========================================针对EhCache的配置项============================== -->
+    <!-- 配置eh缓存管理器 -->
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+    	<property name="configLocation" value="classpath:ehcache.xml" />
+    </bean>
+    
+    <!-- 配置缓存工厂bean对象 -->
+	<bean id="cache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+	    <property name="cacheManager" ref="ehCacheManager" />
+	    <!-- 使用缓存 关联ehcache.xml中的缓存配置 -->
+	    <property name="cacheName" value="configCache" />
+	</bean>
+	
+	<!-- 配置一个缓存拦截器对象，处理具体的缓存业务 -->
+	<bean id="ehCacheInterceptor" class="com.lym.cache.EhCacheInterceptor">
+	    <property name="cache" ref="cache"/>
+	</bean>
+	
+	<!-- 参与缓存的切入点对象 (切入点对象，确定何时何地调用拦截器) -->
+	<bean id="ehCachePointCut" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+	    <!-- 配置缓存aop切面 -->
+	    <property name="advice" ref="ehCacheInterceptor" />
+	    <!-- 配置哪些方法参与缓存策略 -->
+	    <property name="patterns">
+	        <list>
+	        	<value>com.xiaoma.*.dao.*.*.OnEhCache*</value>
+	        </list>
+	    </property>
+	</bean>
+	
+</beans>

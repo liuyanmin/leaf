@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.10.17:3306/tiny_bus_db"
+                        userId="root" password="123456">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- 修改实体存放路径 -->
+        <javaModelGenerator targetPackage="com.xiaoma.order.entity" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!-- 修改.xml文件存放路径 -->
+        <sqlMapGenerator targetPackage="com.xiaoma.order.mapper" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!-- 修改Dao 存放路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.xiaoma.order.mapper" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--
+            每次生成的时候只需修改table里的属性即可
+            tableName: 表名
+            domainObjectName: 实体名
+            mapperName: Dao名
+        -->
+        <table tableName="p_distributed_unique_no_conf" domainObjectName="DistributedUniqueNoConf" />
+
+    </context>
+</generatorConfiguration>
